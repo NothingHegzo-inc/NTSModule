@@ -1,17 +1,11 @@
-import pygame
-import sys, os
-import platform
-if platform.system() == "Windows":
-    appendingSlash = "\\"
-elif platform.system() == "Linux":
-    appendingSlash = "/"
-appendingSys: str = "/".join(str(os.path.dirname(os.path.realpath(__file__))).split(appendingSlash)[:-2])
-sys.path.append(f"{appendingSys}")
-appendingSys: str = "/".join(str(os.path.dirname(os.path.realpath(__file__))).split(appendingSlash)[:-1])
-sys.path.append(f"{appendingSys}")
-del appendingSys
+import pygame, sys, os, logging
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+sys.path.append(os.path.dirname(__file__))
+pygame.init()
 from imports import *
 from pygVariables import *
+from pygFuncs import *
+from Print import Print
 from ButtonClasses.ButtonImage import ButtonImage
 
 pygame.init()
@@ -26,6 +20,7 @@ class Base:
             self.width: int = pygame.display.get_window_size()[0]
             self.height : int = pygame.display.get_window_size()[1]
         except pygame.error:
+            logging.error(f"{UnknownVars.__name__}")
             raise UnknownVars(f"Please make sure that your pygame window is initialised/opened before calling on this decorator.")
     
     def _Checkfunc(self, function) -> None:
@@ -33,6 +28,7 @@ class Base:
         if type(function) is type(nothing):
             self.function = function
         else:
+            logging.error(f"{IncorrectArgsError.__name__}")
             raise IncorrectArgsError(f"Variable '{CYAN}function{RESET}' is supposed to be type {DGREEN}function{RESET} not type {DGREEN}{type(function).__name__}{RESET}.")
     
     def _Checkgame(self) -> None:
@@ -41,21 +37,22 @@ class Base:
             quitImage = ButtonImage(str(os.path.dirname(os.path.realpath(__file__))) + "/Quit.png", (0,0), 0.5)
             quitImage.imageRect.topright = (width, 0)
             quitImage.draw(self.surface)
-            quitImage.click()
+            quitImage._click()
             if quitImage.clicked:
+                logging.info("Quit")
                 sys.exit()
         else:
             pass
 
     def __call__(self, *args, **kwargs) -> object:
         if self.screenColor is None:
+            logging.error(f"{UnknownVars.__name__}")
             raise UnknownVars(f"Variable '{CYAN}screenColor{RESET}' was not specified. To specify it use '{DGREEN}Base{WHITE}.{CYAN}screenColor{WHITE} = {GREEN}yourScreenColor{WHITE}'.")
         self.surface.fill(self.screenColor)
         self._Checkgame()
         self.function()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                import sys
                 sys.exit()
         pygame.display.update()
 

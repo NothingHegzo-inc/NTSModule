@@ -1,10 +1,8 @@
-import sys, os
-appendingSys: str = str(os.path.dirname(os.path.realpath(__file__)))
-sys.path.append(f"{appendingSys}")
-del appendingSys
+import os, sys, time, logging
+sys.path.append(os.path.dirname(__file__))
 from imports import *
 from Print import Print
-import time
+from clear import clear
 
 @overload
 def invalidOption() -> None : ...
@@ -39,8 +37,10 @@ def invalidOption(
     """
     try:
         args[0]
+        logging.error(f"{PositionalArgError.__name__}")
         raise PositionalArgError(f"Function {YELLOW}invalidOption{WHITE}(){RESET} cannot be given positional arguments, and can only have keyword arguments.")
     except IndexError:
+        logging.info(f"{IndexError.__name__} as should.")
         if system is not None and answer is None:
             Print(f"{GREEN}{system}{RESET} system has not been impleminted just yet.", animation=animation)
         elif system is None and answer is not None:
@@ -48,6 +48,7 @@ def invalidOption(
         elif system is None and answer is None:
             Print(f"That is not one of the options. Try again.", animation=animation)
         elif system is not None and answer is not None:
+            logging.error(f"{IncompatableArgsError.__name__}")
             raise IncompatableArgsError(f"Variables '{CYAN}answer{RESET}' and '{CYAN}system{RESET}' cannot both be given a value.")
     
     time.sleep(2)

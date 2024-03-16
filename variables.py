@@ -1,8 +1,5 @@
 import os
 
-# Directory Location
-folderInName: str = "\\".join(str(os.path.dirname(os.path.realpath(__file__))).split("\\")[:-1])
-
 # Text Editting
 RESET: str  = "\033[0m"
 BOLD: str = "\033[1m"
@@ -46,8 +43,6 @@ WHITEBACK: str = "\033[107m"
 
 
 if __name__ == '__main__':
-    from Print import Print
-    Print(f"{folderInName} {appendingSys}")
+    ...
     
 
-del os

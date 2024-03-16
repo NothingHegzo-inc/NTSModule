@@ -1,7 +1,5 @@
 import sys, os
-appendingSys: str = str(os.path.dirname(os.path.realpath(__file__)))
-sys.path.append(f"{appendingSys}")
-del appendingSys
+sys.path.append(os.path.dirname(__file__))
 import pygame
 
 from ButtonClasses.Button import Button

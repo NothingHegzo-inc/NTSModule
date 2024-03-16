@@ -1,10 +1,7 @@
-import sys, os
-appendingSys: str = str(os.path.dirname(os.path.realpath(__file__)))
-sys.path.append(f"{appendingSys}")
-del appendingSys
+import os, sys, time, logging
+sys.path.append(os.path.dirname(__file__))
 from imports import *
 
-import time
 
 @overload
 def Print() -> None: """Scroll to find out!"""
@@ -24,6 +21,7 @@ def Print(
         print(*printText, **kwargs)
     elif animation is True:
         if 'end' in kwargs or 'flush' in kwargs:
+            logging.error(f"{IncompatableArgsError.__name__}")
             raise IncompatableArgsError(f"Variables '{CYAN}end{RESET}' or '{CYAN}flush{RESET}' cannot be given with variable '{CYAN}animation{RESET}' being {BLUE}True{RESET}.")
         else:
             if animationDelay is not None:
@@ -31,6 +29,7 @@ def Print(
             elif animationDelay is None:
                 pythonType(printText, **kwargs)
     else:
+        logging.error(f"{IncorrectArgsError.__name__}")
         raise IncorrectArgsError(f"Variable '{CYAN}animation{RESET}' has to be a {DGREEN}bool{RESET} not a {DGREEN}{type(animation).__name__}{RESET}.")
 
 @overload
@@ -51,4 +50,4 @@ def pythonType(
 
 
 if __name__ == '__main__':
-    Print("Hi dfgg dfg dfg dfg dfg df", flush=True)
+    Print("Hi dfgg dfg dfg dfg dfg df", flush=True, end="True", animation=True)

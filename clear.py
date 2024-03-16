@@ -1,14 +1,7 @@
-import os, platform, sys
-appendingSys: str = str(os.path.dirname(os.path.realpath(__file__)))
-sys.path.append(f"{appendingSys}")
-del appendingSys
+import os, sys, platform, logging
+sys.path.append(os.path.dirname(__file__))
 from imports import *
-from variables import *
 from Print import Print
-
-
-#def _clearWrapper(clearFunc):
-
 
 @overload
 def clear() -> None: """Uses the default system to find the operating system's clear keyword."""
@@ -30,8 +23,10 @@ def clear(
                 permanentSpecifier = permaSpecifier
                 permaAdded = True
             else:
+                logging.error(f"{CannotOverride.__name__}")
                 raise CannotOverride(f"'{CYAN}permaSpecifier{RESET}' variable has already been specified and cannot be overriden.")
         else:
+            logging.error(f"{IncorrectArgsError.__name__}")
             raise IncorrectArgsError(f"Variable '{CYAN}permaSpecifier{RESET}' has to be type {DGREEN}str{RESET} not {DGREEN}{type(permaSpecifier).__name__}{RESET}.")
     else:
         if specifier is None and permaAdded is False:
@@ -46,11 +41,13 @@ def clear(
                 print(f"If you can see this, function '{YELLOW}clear{WHITE}(){RESET}' did not work because '{BLUE}specifier{RESET} : {RED}{specifier}{RESET}' is incorrect or in-operable.")
                 os.system(specifier)
             else:
+                logging.error(f"{IncorrectArgsError.__name__}")
                 raise IncorrectArgsError(f"Variable '{CYAN}specifier{RESET}' has to be type {DGREEN}str{RESET} not {DGREEN}{type(specifier).__name__}{RESET}.")
         elif permaAdded is True:
             Print(f"If you can see this, function '{YELLOW}clear{WHITE}(){RESET}' did not work because '{BLUE}permaSpecifier{RESET} : {RED}{permanentSpecifier}{RESET}' is incorrect or in-operable.")
             os.system(permanentSpecifier)
         else:
+            logging.error(f"{UnknownError.__name__}")
             raise UnknownError(f"This error was given by function {YELLOW}clear{WHITE}(){RESET}.")
 
 

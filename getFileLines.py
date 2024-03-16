@@ -1,8 +1,10 @@
 import os, sys
-appendingSys: str = str(os.path.dirname(os.path.realpath(__file__)))
-sys.path.append(f"{appendingSys}")
-del appendingSys
+sys.path.append(os.path.dirname(__file__))
 from imports import *
+from Print import Print
+from clear import clear
+from invalidOption import invalidOption
+import logging
 
 @overload
 def getFileLines(filePath: str) -> list[str]: ...
@@ -26,12 +28,18 @@ def getFileLines(
             return readlinesSplit
         elif lineNum is not None:
             if type(lineNum) is not int:
+                logging.error(f"{TypeError.__name__}")
                 TypeError(f"Variable '{CYAN}line{RESET}' type has to be {DGREEN}int{RESET} not {DGREEN}{type(lineNum).__name__}{RESET}.")
             elif type(lineNum) is int:
                 if lineNum > len(readlinesSplit):
+                    logging.error(f"{IndexError.__name__}")
+                    raise IndexError(f"Variable '{CYAN}lineNum{RESET}' is higher than the maximum number of lines in the file.")
+                elif lineNum < -1 * len(readlinesSplit):
+                    logging.error(f"{IndexError.__name__}")
                     raise IndexError(f"Variable '{CYAN}lineNum{RESET}' is higher than the maximum number of lines in the file.")
                 return readlinesSplit[lineNum]
     except FileNotFoundError:
+        logging.error(f"{IncorrectFilePathError.__name__}")
         raise IncorrectFilePathError(f"File path {GREEN}{filePath}{RESET} not found, please make sure it is the correct file path.")
 
 

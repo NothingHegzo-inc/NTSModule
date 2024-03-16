@@ -1,20 +1,12 @@
-import pygame
-import sys, os
-import platform
-if platform.system() == "Windows":
-    appendingSlash = "\\"
-elif platform.system() == "Linux":
-    appendingSlash = "/"
-appendingSys: str = "/".join(str(os.path.dirname(os.path.realpath(__file__))).split(appendingSlash)[:-2])
-sys.path.append(f"{appendingSys}")
-appendingSys: str = "/".join(str(os.path.dirname(os.path.realpath(__file__))).split(appendingSlash)[:-1])
-sys.path.append(f"{appendingSys}")
-del appendingSys
+import pygame, sys, os, logging
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+pygame.init()
 from imports import *
-from Print import Print
 from pygVariables import *
 from pygFuncs import *
-pygame.init()
+from Print import Print
+
 
 class ButtonImage:
     @overload
@@ -24,7 +16,7 @@ class ButtonImage:
     @overload
     def __init__(self, image: Surface | filePath, pos: Coordinate, scale: int) -> None: ...
     @overload
-    def __init__(self, image: Surface | filePath, pos: Coordinate, elevation: int) -> None: ...
+    def __init__(self, image: Surface | filePath, pos: Coordinate, scale: int, elevation: int) -> None: ...
     def __init__(
             self,
             image: Surface | filePath,
@@ -38,9 +30,11 @@ class ButtonImage:
         elif type(image) is str:
             self.image: Surface = pygame.image.load(image).convert_alpha()
         else:
+            logging.error(f"{TypeError.__name__}")
             raise TypeError(f"Variable '{CYAN}image{RESET}' has to be type {DGREEN}pygame{WHITE}.{DGREEN}Surface{RESET} or {DGREEN}str{RESET} not type {DGREEN}{type(image).__name__}{RESET}.")
         self.image = pygame.transform.scale(self.image, (int(self.image.get_width() * scale), int(self.image.get_height() * scale)))
         self.imageRect = self.image.get_rect()
+        self.imageMask = pygame.mask.from_surface(self.image)
         self.imageRect.center = pos
         self.ORimageRectY = self.imageRect.y
         # Elevation
@@ -51,6 +45,7 @@ class ButtonImage:
         # Extra variables
         self.pos: Coordinate = pos
         self.clicked = False
+        self.down = False
     
     @overload
     def draw(self, surface: Surface) -> None: ...
@@ -63,7 +58,7 @@ class ButtonImage:
     ) -> None:
         self.__elevation(surface, edge)
         surface.blit(self.image, self.imageRect)
-        self.click()
+        self.__click()
     
     def __elevation(
             self,
@@ -72,6 +67,7 @@ class ButtonImage:
     ) -> None:
             if self.elevation is not None:
                 if type(self.elevation) is not int:
+                    logging.error(f"{IncorrectArgsError.__name__}")
                     raise IncorrectArgsError(f"Variable '{CYAN}elevation{RESET}' can only be type {DGREEN}int{RESET} not {DGREEN}{type(self.elevation).__name__}{RESET}.")
                 self.imageRect.y = self.ORimageRectY - self.elevation
                 self.EleRect.height = self.imageRect.height + self.elevation
@@ -85,11 +81,53 @@ class ButtonImage:
         else:
             self.elevation = self.dElev
     
-    def click(self) -> bool:
+    def _click(self) -> None:
+        """Used by other classes to change this classes variable self.clicked"""
         if self.imageRect.collidepoint(variables()[0]) and variables()[1][0] and self.clicked is False:
             self.clicked = True
-            return True
         else:
             if variables()[1][0] is False:
                 self.clicked = False
-                return False
+    
+    def __click(self) -> None:
+        if self.imageRect.collidepoint(variables()[0]) and variables()[1][0] and self.clicked is False:
+            self.clicked = True
+        else:
+            if variables()[1][0] is False:
+                self.clicked = False
+
+    def click(self) -> bool:
+        if self.imageRect.collidepoint(variables()[0]) and variables()[1][0] and self.down is False:
+            self.down = True
+        elif self.down is True and self.imageRect.collidepoint(variables()[0]) and variables()[1][0] is False:
+            self.down = False
+            return True
+        elif self.down is True and self.imageRect.collidepoint(variables()[0]) is False:
+            self.down = False
+            return False
+        return False
+        
+        
+
+        
+        
+
+if __name__ == '__main__':
+    pygame.init()
+    screen = pygame.display.set_mode((500,500))
+    center: Coordinate = pygame.display.get_window_size()[0]/2, pygame.display.get_window_size()[1]/2
+    x = ButtonImage("C:/Users/jwjnt/Desktop/GitLab/NTS_Module2/Images/button spritesheet.png", center, 2)
+    run = True
+    while run:
+        screen.fill((255,255,255))
+        
+        if x.click():
+            print("BOOM")
+
+        x.draw(screen)
+        #print(x.buttonRect.center, x.elevation)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+        pygame.display.update()
+ 

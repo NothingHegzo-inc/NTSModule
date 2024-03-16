@@ -1,28 +1,23 @@
-import pygame
-import sys, os
-import platform
-if platform.system() == "Windows":
-    appendingSlash = "\\"
-elif platform.system() == "Linux":
-    appendingSlash = "/"
-appendingSys: str = "/".join(str(os.path.dirname(os.path.realpath(__file__))).split(appendingSlash)[:-2])
-sys.path.append(f"{appendingSys}")
-appendingSys: str = "/".join(str(os.path.dirname(os.path.realpath(__file__))).split(appendingSlash)[:-1])
-sys.path.append(f"{appendingSys}")
-del appendingSys
+import pygame, sys, os, logging
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+pygame.init()
 from imports import *
-from Print import Print
 from pygVariables import *
 from pygFuncs import *
+from Print import Print
+
 
 
 class Button:
     @overload
     def __init__(self, text:str, buttonColor: ColorRBG, pos: Coordinate) -> None: ...
     @overload
+    def __init__(self, text: str, buttonColor: ColorRBG, pos: Coordinate, width: int, height: int) -> None: ...
+    @overload
     def __init__(self, text: str, buttonColor: ColorRBG, pos: Coordinate, width: int, height: int, elevation: int) -> None: ...
     @overload
-    def __init__(self, text: str, buttonColor: ColorRBG, pos: Coordinate, fontName: str, fontSize: int, fontColor: ColorRBG) -> None: ...
+    def __init__(self, text: str, buttonColor: ColorRBG, pos: Coordinate, width: int, height: int, elevation: int, fontName: str, fontSize: int, fontColor: ColorRBG) -> None: ...
     def __init__(
             self,
             text: str,
@@ -30,13 +25,14 @@ class Button:
             pos: Coordinate,
             width: int = 100,
             height: int = 50,
+            elevation: Optional[int] = None,
             fontName: Optional[Font] = None,
             fontSize: int = 20,
-            fontColor: ColorRBG = (0,0,0),
-            elevation: Optional[int] = None
+            fontColor: ColorRBG = (0,0,0)
     ) -> None:
         # Font
         self.font: Font = pygame.font.SysFont(fontName, fontSize)
+        self.fontColor = fontColor
         # Button
         self.buttonRect: Rect = pygame.Rect((0, 0),(width, height))
         self.buttonRect.center = pos
@@ -54,6 +50,7 @@ class Button:
         # Extra variables
         self.pos: Coordinate = pos
         self.clicked = False
+        self.down = False
         
 
     @overload
@@ -81,7 +78,7 @@ class Button:
 
         self.__drawBorder(surface, edge, borderWidth)
         self.__hover(hoverColor)
-        self.click()
+        self.__click()
 
     def __elevation(
             self,
@@ -90,6 +87,7 @@ class Button:
     ) -> None:
             if self.elevation is not None:
                 if type(self.elevation) is not int:
+                    logging.error(f"{IncorrectArgsError.__name__}")
                     raise IncorrectArgsError(f"Variable '{CYAN}elevation{RESET}' can only be type {DGREEN}int{RESET} not {DGREEN}{type(self.elevation).__name__}{RESET}.")
                 self.buttonRect.y = self.ORButtonRectY - self.elevation
                 self.EleRect.height = self.buttonRect.height + self.elevation
@@ -124,14 +122,31 @@ class Button:
             self.buttonColor = self.ORbuttonColor
 
 
-    def click(self) -> bool:
+    def _click(self) -> None:
+        """Used by other classes to change this classes variable self.clicked"""
         if self.buttonRect.collidepoint(variables()[0]) and variables()[1][0] and self.clicked is False:
             self.clicked = True
-            return True
         else:
             if variables()[1][0] is False:
                 self.clicked = False
-                return False
+    
+    def __click(self) -> None:
+        if self.buttonRect.collidepoint(variables()[0]) and variables()[1][0] and self.clicked is False:
+            self.clicked = True
+        else:
+            if variables()[1][0] is False:
+                self.clicked = False
+
+    def click(self) -> bool:
+        if self.buttonRect.collidepoint(variables()[0]) and variables()[1][0] and self.down is False:
+            self.down = True
+        elif self.down is True and self.buttonRect.collidepoint(variables()[0]) and variables()[1][0] is False:
+            self.down = False
+            return True
+        elif self.down is True and self.buttonRect.collidepoint(variables()[0]) is False:
+            self.down = False
+            return False
+        return False
 
 
 if __name__ == '__main__':

@@ -1,19 +1,11 @@
 import pygame
 import sys, os
-import platform
-if platform.system() == "Windows":
-    appendingSlash = "\\"
-elif platform.system() == "Linux":
-    appendingSlash = "/"
-appendingSys: str = "/".join(str(os.path.dirname(os.path.realpath(__file__))).split(appendingSlash)[:-2])
-sys.path.append(f"{appendingSys}")
-appendingSys: str = "/".join(str(os.path.dirname(os.path.realpath(__file__))).split(appendingSlash)[:-1])
-sys.path.append(f"{appendingSys}")
-del appendingSys
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+sys.path.append(os.path.dirname(__file__))
+pygame.init()
 from imports import *
 from pygVariables import *
-
-pygame.init()
+from Print import Print
 
 # Functions
 def variables() -> tuple[Coordinate, mousePress, pygameKeyCode]:
