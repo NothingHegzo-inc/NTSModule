@@ -9,13 +9,16 @@ import logging
 @overload
 def getFileLines(filePath: str) -> list[str]: ...
 @overload
-def getFileLines(filePath: str, lineNum: int) -> str: ...
+def getFileLines(filePath: str, mode: str) -> str: ...
+@overload
+def getFileLines(filePath: str, mode:str, lineNum: int) -> str: ...
 def getFileLines(
         filePath: str,
+        mode: str = "r",
         lineNum: Optional[int] = None
 ) -> list[str] | str:
     try:
-        with open(filePath, "r") as openedFile:
+        with open(filePath, mode) as openedFile:
             readlines = openedFile.readlines()
         
         readlinesSplit = []

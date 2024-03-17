@@ -58,5 +58,18 @@ def Logging() -> None:
 
 Logging()
 del Logging
-
+def pycacheDel() -> None:
+    import shutil
+    sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+    if os.path.isdir("NTSModule/__pycache__"):
+        shutil.rmtree("NTSModule/__pycache__")
+    if os.path.isdir("__pycache__"):
+        shutil.rmtree("__pycache__")
+    if os.path.isdir("NTSModule/pygameNTS/__pycache__"):
+        shutil.rmtree("NTSModule/pygameNTS/__pycache__")
+    if os.path.isdir("NTSModule/pygameNTS/ButtonClasses/__pycache__"):
+        shutil.rmtree("NTSModule/pygameNTS/ButtonClasses/__pycache__")
+    del shutil
+pycacheDel()
+del pycacheDel
 logging.info(f"NTSModule imported successfully.")
