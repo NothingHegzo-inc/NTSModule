@@ -19,6 +19,7 @@ def question(question: str, maxOptions: int, startClear: bool) -> int: ...
 def question(question: str, maxOptions: int, extraOptions: list[str] | dict[str , int]) -> int | str: ...
 @overload
 def question(question: str, maxOptions: int, zeroIsOption: bool, animation: bool, startClear: bool, extraOptions: list[str] | dict[str , int]) -> int | str: ...
+@logC()
 def question(
         question: str,
         maxOptions: Optional[int] = None,
@@ -50,8 +51,8 @@ def question(
                 logging.error(f"{IncorrectArgsError.__name__}")
                 raise IncorrectArgsError(f"Variable '{CYAN}extraOptions{RESET}' has to be type {DGREEN}list{PINK}[{DGREEN}str{PINK}]{RESET} or type {DGREEN}dict{PINK}[{DGREEN}str{RESET}, {DGREEN}int{PINK}]{RESET}. {BLACK}(even if there is one option){RESET}")
     if maxOptions is None and (type(extraOptions) is not list and type(extraOptions) is not dict):
-        logging.error(f"{IncompatableArgsError.__name__}")
-        raise IncompatableArgsError(f"If variable '{CYAN}maxOptions{RESET}' is not given, then variable '{CYAN}extraOptions{RESET}' has to be a {DGREEN}list{PINK}[{DGREEN}str{PINK}]{RESET} or {DGREEN}dict{PINK}[{DGREEN}str{RESET}, {DGREEN}int{PINK}]{RESET} not a {RED}{type(extraOptions).__name__}{RESET}.")
+        logging.error(f"{UnknownVars.__name__}")
+        raise UnknownVars(f"If variable '{CYAN}maxOptions{RESET}' is not given, then variable '{CYAN}extraOptions{RESET}' has to be a {DGREEN}list{PINK}[{DGREEN}str{PINK}]{RESET} or {DGREEN}dict{PINK}[{DGREEN}str{RESET}, {DGREEN}int{PINK}]{RESET} not a {RED}{type(extraOptions).__name__}{RESET}.")
     if animation is True and ('end' in kwargs or 'flush' in kwargs):
         logging.error(f"{IncompatableArgsError.__name__}")
         raise IncompatableArgsError(f"Variables '{CYAN}end{RESET}' or '{CYAN}flush{RESET}' cannot be given with variable '{CYAN}animation{RESET}' being {BLUE}True{RESET}.")

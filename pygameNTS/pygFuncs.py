@@ -8,6 +8,7 @@ from pygVariables import *
 from Print import Print
 
 # Functions
+#@logC()
 def variables() -> tuple[Coordinate, mousePress, pygameKeyCode]:
     mousePos = pygame.mouse.get_pos()
     mousePressed = pygame.mouse.get_pressed()
@@ -20,6 +21,7 @@ def hoverColorFunc(rectColor: ColorRBG) -> ColorRBG: """Default function."""
 def hoverColorFunc(rectColor: ColorRBG, addRed: int, addBlue: int, addGree: int) -> ColorRBG: """***KEYWORD ARGUMENTS RECOMMENDED*** Add a custom amount of a specific color."""
 @overload
 def hoverColorFunc(rectColor: ColorRBG, addColor: int, allColors: bool) -> ColorRBG: """***KEYWORD ARGUMENTS RECOMMENDED*** Add the same amount to all colors that are accessable, by default this is set to -25. 'allColors' defines whetehr all colors are affected or only colors that are below 255."""
+#@logC()
 def hoverColorFunc(
         rectColor: ColorRBG, 
         addRed: int = 0, 

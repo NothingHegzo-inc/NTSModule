@@ -1,4 +1,5 @@
 import os
+from typing import Callable, Any
 
 # Text Editting
 RESET: str  = "\033[0m"
@@ -40,8 +41,19 @@ LIGHTBLUEBACK: str = "\033[104m"
 PINKBACK: str = "\033[105m"
 CYANBACK: str = "\033[106m"
 WHITEBACK: str = "\033[107m"
-
-
+PASS: str = ""
+from functools import wraps
+class function:
+    def __init__(self, function: Callable[..., Any]) -> None:
+        self.func = function
+    def __call__(self, *args: Any, **kwargs: Any) -> Callable[..., Any] | type:
+        @wraps(self.func)
+        def deco():
+            x = self.func(*args, **kwargs)
+            return x
+        return deco()
+    @property
+    def __name__(self): return self.func.__name__
 if __name__ == '__main__':
     ...
     

@@ -11,6 +11,7 @@ def Print(*printText, **kwargs) -> None: """Normal print, can add normal print f
 def Print(*printText, animation: bool, **kwargs) -> None: """Print with animation option, set the second input variable to true."""
 @overload
 def Print(*printText, animation: bool, animationDelay: int | float, **kwargs) -> None: """Adding a delay option. Can manually change the delay between each letter printed in the animation."""
+@logC()
 def Print(
         *printText,
         animation: bool = False,
@@ -36,6 +37,7 @@ def Print(
 def pythonType(text: str) -> None: ...
 @overload
 def pythonType(text: str, delayAmount: int | float) -> None: ...
+@logC()
 def pythonType(
         text: str, 
         delayAmount: float | int = 0.025,

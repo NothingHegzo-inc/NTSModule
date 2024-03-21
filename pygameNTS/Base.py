@@ -11,6 +11,10 @@ from ButtonClasses.ButtonImage import ButtonImage
 pygame.init()
 
 class Base:
+    @property
+    def screenColor(self) -> ColorRBG: ...
+    @property
+    def quitImageOption(self) -> bool: ...
     screenColor: Optional[ColorRBG] = None
     quitImageOption: bool = False
     def __init__(self, function) -> None:
@@ -41,8 +45,6 @@ class Base:
             if quitImage.clicked:
                 logging.info("Quit")
                 sys.exit()
-        else:
-            pass
 
     def __call__(self, *args, **kwargs) -> object:
         if self.screenColor is None:
@@ -50,11 +52,18 @@ class Base:
             raise UnknownVars(f"Variable '{CYAN}screenColor{RESET}' was not specified. To specify it use '{DGREEN}Base{WHITE}.{CYAN}screenColor{WHITE} = {GREEN}yourScreenColor{WHITE}'.")
         self.surface.fill(self.screenColor)
         self._Checkgame()
-        self.function()
+        returnValue = self.function(*args, **kwargs)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
         pygame.display.update()
+        return returnValue
+    
+    def changeColor(color: ColorRBG) -> None:
+        """Used in a while loop to change the screen color."""
+        while Base.screenColor != color:
+            Base.screenColor = color
+            logging.debug(f"Screen color changed to {Base.screenColor}")
 
 
 if __name__ == '__main__':

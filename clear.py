@@ -11,6 +11,7 @@ def clear(specifier: str) -> None: """Lets you use a different specified keyword
 def clear(permaSpecifier: str) -> None: """Lets you add a permenant specifier that will be used over all the clear called functions. When calling this function with that argument, it will not run but just specify the specifier."""
 
 permaAdded: bool = False
+@logC()
 def clear(
         specifier: Optional[str] = None,
         permaSpecifier: Optional[str] = None

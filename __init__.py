@@ -7,30 +7,34 @@ from Print import Print
 from invalidOption import invalidOption
 from question import question
 from errorClasses import *
+from logger import logC
+from validationChecker import checkPara
 
-clear()
-Print(f"Module {GREEN}NTSModule{RESET} has been successfully imported!\nEnjoy!")
 
 def Logging() -> None:
+    needLogging = []
     if os.path.isdir("Loggers"):
         pass
     else:
         os.mkdir("Loggers")
+        needLogging.append("Loggers folder created.")
     if os.path.isfile("Loggers/logger.log"):
         pass
     else:
         with open("Loggers/logger.log", "w") as openedFile:
             openedFile.write("")
+        needLogging.append("'logger.log' file created.") 
     if os.path.isfile("Loggers/onetimelogger.log"):
         pass
     else:
         with open("Loggers/onetimelogger.log", "w") as openedFile:
             openedFile.write("")
+        needLogging.append("'onetimelogger.log' file created.")
     if os.path.isdir("Loggers/backups"):
         pass
     else:
         os.mkdir("Loggers/backups")
-
+        needLogging.append("Loggers/backups folder created.")
     loggerHandler = logging.FileHandler("Loggers/logger.log")
     oneTimeHandler = logging.FileHandler("Loggers/onetimelogger.log", "w")
     logging.basicConfig(
@@ -39,7 +43,7 @@ def Logging() -> None:
         datefmt='%d-%b-%y %H:%M:%S',
         handlers=[loggerHandler, oneTimeHandler]
     )
-
+    [logging.debug(debugMessage) for debugMessage in needLogging]
     if len(getFileLines("Loggers/logger.log")) > 100_000:
         x=0
         while True:
@@ -73,3 +77,5 @@ def pycacheDel() -> None:
 pycacheDel()
 del pycacheDel
 logging.info(f"NTSModule imported successfully.")
+clear()
+Print(f"Module {GREEN}NTSModule{RESET} has been successfully imported!\nEnjoy!")

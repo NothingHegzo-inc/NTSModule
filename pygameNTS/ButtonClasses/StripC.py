@@ -52,7 +52,7 @@ class StripC:
         if listOfImages is None:
             if width is None or height is None:
                 logging.error(f"{UnknownVars.__name__}")
-                raise UnknownVars(f"Variables '{CYAN}width{RESET}' or '{CYAN}{height}{RESET}' were not given.")
+                raise UnknownVars(f"Variables '{CYAN}width{RESET}' or '{CYAN}height{RESET}' were not given.")
             strippedImage: Surface = pygame.Surface((width, height))
             strippedImage.blit(self.imageInput, (0,0), (frameStart, (width, height)))
             strippedImage.set_colorkey((0,0,0))
@@ -60,7 +60,7 @@ class StripC:
         elif type(listOfImages) is list:
             if width is not None or height is not None or frameStart != (0,0):
                 logging.error(f"{IncompatableArgsError.__name__}")
-                raise IncompatableArgsError(f"Arguments '{CYAN}width{RESET}' or '{CYAN}height{RESET}' or '{CYAN}frameStart{RESET}' cannot be given while '{CYAN}listOfImages{RESET}' is given.")
+                raise IncompatableArgsError(f"Arguments '{CYAN}width{RESET}' or/and '{CYAN}height{RESET}' or '{CYAN}frameStart{RESET}' cannot be given while '{CYAN}listOfImages{RESET}' is given.")
             listOfSurfaces = []
             for w,h,f in listOfImages:
                 image: Surface = pygame.Surface((w,h))
