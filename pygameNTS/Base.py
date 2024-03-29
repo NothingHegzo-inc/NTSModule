@@ -15,8 +15,11 @@ class Base:
     def screenColor(self) -> ColorRBG: ...
     @property
     def quitImageOption(self) -> bool: ...
+    @property
+    def defaultColor(self) -> None: ...
     screenColor: Optional[ColorRBG] = None
     quitImageOption: bool = False
+    defaultColor: ColorRBG = None
     def __init__(self, function) -> None:
         self._Checkfunc(function)
         try:
@@ -24,16 +27,15 @@ class Base:
             self.width: int = pygame.display.get_window_size()[0]
             self.height : int = pygame.display.get_window_size()[1]
         except pygame.error:
-            logging.error(f"{UnknownVars.__name__}")
             raise UnknownVars(f"Please make sure that your pygame window is initialised/opened before calling on this decorator.")
-    
+        Base.defaultColor = self.screenColor
+
     def _Checkfunc(self, function) -> None:
         def nothing() -> None: ...
         if type(function) is type(nothing):
             self.function = function
         else:
-            logging.error(f"{IncorrectArgsError.__name__}")
-            raise IncorrectArgsError(f"Variable '{CYAN}function{RESET}' is supposed to be type {DGREEN}function{RESET} not type {DGREEN}{type(function).__name__}{RESET}.")
+            raise IncorrectTypesError(arguments="function", argumentTypes=type(nothing))#raise IncorrectArgsError(f"Variable '{CYAN}function{RESET}' is supposed to be type {DGREEN}function{RESET} not type {DGREEN}{type(function).__name__}{RESET}.")
     
     def _Checkgame(self) -> None:
         if self.quitImageOption is True:
@@ -48,7 +50,6 @@ class Base:
 
     def __call__(self, *args, **kwargs) -> object:
         if self.screenColor is None:
-            logging.error(f"{UnknownVars.__name__}")
             raise UnknownVars(f"Variable '{CYAN}screenColor{RESET}' was not specified. To specify it use '{DGREEN}Base{WHITE}.{CYAN}screenColor{WHITE} = {GREEN}yourScreenColor{WHITE}'.")
         self.surface.fill(self.screenColor)
         self._Checkgame()
@@ -64,6 +65,12 @@ class Base:
         while Base.screenColor != color:
             Base.screenColor = color
             logging.debug(f"Screen color changed to {Base.screenColor}")
+    
+    def defaultScreenColor() -> None:
+        """Used in a while loop to change the screen color back to the first color set in 'Base.screenColor' property."""
+        while Base.screenColor != Base.defaultColor:
+            Base.screenColor = Base.defaultColor
+            logging.debug(f"Screen color changed to the deault color. Screen color: {Base.screenColor}. Default screen color {Base.defaultColor}")
 
 
 if __name__ == '__main__':
@@ -77,4 +84,3 @@ if __name__ == '__main__':
     run = True
     while run:
         game()
-        #print(Base.cache_info())

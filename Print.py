@@ -17,12 +17,11 @@ def Print(
         animation: bool = False,
         animationDelay: Optional[int | float] = None,
         **kwargs
-) -> None:
+) -> Any:
     if animation is False:
         print(*printText, **kwargs)
-    elif animation is True:
+    elif animation:
         if 'end' in kwargs or 'flush' in kwargs:
-            logging.error(f"{IncompatableArgsError.__name__}")
             raise IncompatableArgsError(f"Variables '{CYAN}end{RESET}' or '{CYAN}flush{RESET}' cannot be given with variable '{CYAN}animation{RESET}' being {BLUE}True{RESET}.")
         else:
             if animationDelay is not None:
@@ -30,9 +29,15 @@ def Print(
             elif animationDelay is None:
                 pythonType(printText, **kwargs)
     else:
-        logging.error(f"{IncorrectArgsError.__name__}")
         raise IncorrectArgsError(f"Variable '{CYAN}animation{RESET}' has to be a {DGREEN}bool{RESET} not a {DGREEN}{type(animation).__name__}{RESET}.")
+    
+    try:
+        printText[1]
+        return printText
+    except IndexError:
+        return printText[0]
 
+    
 @overload
 def pythonType(text: str) -> None: ...
 @overload
@@ -43,7 +48,7 @@ def pythonType(
         delayAmount: float | int = 0.025,
         **kwargs
 ) -> None:
-    if type(text) is tuple or type(text) is list:
+    if checkPara(text, tuple) or checkPara(text, list):
         text = " ".join(list(text))
     for char in text:
         print(char, **kwargs, end='', flush=True)

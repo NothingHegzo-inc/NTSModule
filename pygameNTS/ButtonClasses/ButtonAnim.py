@@ -15,11 +15,9 @@ class ButtonAnim:
             imageDown: ButtonImage
     ) -> None:
         if type(imageUp) is not ButtonImage:
-            logging.error(f"{IncorrectArgsError.__name__}")
-            raise IncorrectArgsError(f"Variables '{CYAN}imageUp{RESET}' has to be type {DGREEN}{ButtonImage.__name__}{RESET} not type {DGREEN}{type(imageUp).__name__}{RESET}.")
+            raise IncorrectTypesError(arguments="imageUp", argumentTypes=ButtonImage)#raise IncorrectArgsError(f"Variables '{CYAN}imageUp{RESET}' has to be type {DGREEN}{ButtonImage.__name__}{RESET} not type {DGREEN}{type(imageUp).__name__}{RESET}.")
         elif type(imageDown) is not ButtonImage:
-            logging.error(f"{IncorrectArgsError.__name__}")
-            raise IncorrectArgsError(f"Variables '{CYAN}imageDown{RESET}' has to be type {DGREEN}{ButtonImage.__name__}{RESET} not type {DGREEN}{type(imageUp).__name__}{RESET}.")
+            raise IncorrectTypesError(arguments="imageDown", argumentTypes=ButtonImage)#raise IncorrectArgsError(f"Variables '{CYAN}imageDown{RESET}' has to be type {DGREEN}{ButtonImage.__name__}{RESET} not type {DGREEN}{type(imageUp).__name__}{RESET}.")
         # Variables
         self.imageUp = imageUp
         self.imageDown = imageDown
@@ -36,4 +34,4 @@ class ButtonAnim:
         return self.imageUp.click()
 
 if __name__ == '__main__':
-    ...
+    ButtonAnim("hiu","hi")

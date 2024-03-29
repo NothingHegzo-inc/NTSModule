@@ -30,8 +30,7 @@ class ButtonImage:
         elif type(image) is str:
             self.image: Surface = pygame.image.load(image).convert_alpha()
         else:
-            logging.error(f"{TypeError.__name__}")
-            raise TypeError(f"Variable '{CYAN}image{RESET}' has to be type {DGREEN}pygame{WHITE}.{DGREEN}Surface{RESET} or {DGREEN}str{RESET} not type {DGREEN}{type(image).__name__}{RESET}.")
+            raise IncorrectTypesError(arguments="image", argumentTypes=Surface)#raise TypeError(f"Variable '{CYAN}image{RESET}' has to be type {DGREEN}pygame{WHITE}.{DGREEN}Surface{RESET} or {DGREEN}str{RESET} not type {DGREEN}{type(image).__name__}{RESET}.")
         self.image = pygame.transform.scale(self.image, (int(self.image.get_width() * scale), int(self.image.get_height() * scale)))
         self.imageRect = self.image.get_rect()
         self.imageMask = pygame.mask.from_surface(self.image)
@@ -46,6 +45,7 @@ class ButtonImage:
         self.pos: Coordinate = pos
         self.clicked = False
         self.down = False
+        self.scale = scale
     
     @overload
     def draw(self, surface: Surface) -> None: ...
@@ -67,8 +67,7 @@ class ButtonImage:
     ) -> None:
             if self.elevation is not None:
                 if type(self.elevation) is not int:
-                    logging.error(f"{IncorrectArgsError.__name__}")
-                    raise IncorrectArgsError(f"Variable '{CYAN}elevation{RESET}' can only be type {DGREEN}int{RESET} not {DGREEN}{type(self.elevation).__name__}{RESET}.")
+                    raise IncorrectTypesError(arguments="elevation", argumentTypes=int)#raise IncorrectArgsError(f"Variable '{CYAN}elevation{RESET}' can only be type {DGREEN}int{RESET} not {DGREEN}{type(self.elevation).__name__}{RESET}.")
                 self.imageRect.y = self.ORimageRectY - self.elevation
                 self.EleRect.height = self.imageRect.height + self.elevation
                 self.EleRect.midtop = self.imageRect.midtop
@@ -113,21 +112,5 @@ class ButtonImage:
         
 
 if __name__ == '__main__':
-    pygame.init()
-    screen = pygame.display.set_mode((500,500))
-    center: Coordinate = pygame.display.get_window_size()[0]/2, pygame.display.get_window_size()[1]/2
-    x = ButtonImage("C:/Users/jwjnt/Desktop/GitLab/NTS_Module2/Images/button spritesheet.png", center, 2)
-    run = True
-    while run:
-        screen.fill((255,255,255))
-        
-        if x.click():
-            print("BOOM")
+    ...
 
-        x.draw(screen)
-        #print(x.buttonRect.center, x.elevation)
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit()
-        pygame.display.update()
- 

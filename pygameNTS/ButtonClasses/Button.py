@@ -40,6 +40,7 @@ class Button:
         self.buttonColor: ColorRBG = buttonColor
         self.ORbuttonColor = buttonColor
         # Text
+        self.originalText: str = text
         self.text: Surface = self.font.render(text, True, fontColor)
         self.textRect: Rect = self.text.get_rect()
         # Elevation
@@ -64,13 +65,15 @@ class Button:
             surface: Surface,
             hoverColor: Optional[ColorRBG] = None,
             edge: int = 15,
-            borderWidth: int = 1
+            borderWidth: int = 1,
+            elevation: bool = True
     ) -> None:
         
         if hoverColor is None:
             hoverColor = hoverColorFunc(self.buttonColor)
 
-        self.__elevation(surface, edge)
+        if elevation:
+            self.__elevation(surface, edge)
 
         self.textRect.center = self.buttonRect.center
         pygame.draw.rect(surface, self.buttonColor, self.buttonRect, border_radius=edge)
@@ -87,8 +90,7 @@ class Button:
     ) -> None:
             if self.elevation is not None:
                 if type(self.elevation) is not int:
-                    logging.error(f"{IncorrectArgsError.__name__}")
-                    raise IncorrectArgsError(f"Variable '{CYAN}elevation{RESET}' can only be type {DGREEN}int{RESET} not {DGREEN}{type(self.elevation).__name__}{RESET}.")
+                    raise IncorrectTypesError(arguments="elevation", argumentTypes=int)#raise IncorrectArgsError(f"Variable '{CYAN}elevation{RESET}' can only be type {DGREEN}int{RESET} not {DGREEN}{type(self.elevation).__name__}{RESET}.")
                 self.buttonRect.y = self.ORButtonRectY - self.elevation
                 self.EleRect.height = self.buttonRect.height + self.elevation
                 self.EleRect.midtop = self.buttonRect.midtop
@@ -162,7 +164,6 @@ if __name__ == '__main__':
             print("BOOM")
 
         x.draw(screen, borderWidth=1, hoverColor=hoverColorFunc((255,0,255), allColors=True))
-        #print(x.buttonRect.center, x.elevation)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()

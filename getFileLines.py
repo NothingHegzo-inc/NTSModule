@@ -26,20 +26,18 @@ def getFileLines(
         if lineNum is None:
             return readlinesSplit
         elif lineNum is not None:
-            if type(lineNum) is not int:
-                logging.error(f"{TypeError.__name__}")
-                TypeError(f"Variable '{CYAN}line{RESET}' type has to be {DGREEN}int{RESET} not {DGREEN}{type(lineNum).__name__}{RESET}.")
-            elif type(lineNum) is int:
+            if not checkPara(lineNum, int):
+                raise IncorrectTypesError(arguments="line", argumentTypes=int)#TypeError(f"Variable '{CYAN}line{RESET}' type has to be {DGREEN}int{RESET} not {DGREEN}{type(lineNum).__name__}{RESET}.")
+            elif checkPara(lineNum, int):
                 if lineNum > len(readlinesSplit) or lineNum < -1 * len(readlinesSplit):
                     logging.error(f"{IndexError.__name__}")
                     raise IndexError(f"Variable '{CYAN}lineNum{RESET}' is higher than the maximum number of lines in the file.")
                 return readlinesSplit[lineNum]
     except FileNotFoundError:
-        logging.error(f"{IncorrectFilePathError.__name__}")
-        raise IncorrectFilePathError(filePath)
+        raise IncorrectFilePathError(path=filePath)
 
 
 
 if __name__ == '__main__':
-    print(getFileLines("C:/Users/jwjnt/Desktop/GitLab/NTS_Module2/NTS_Module2/getFileLines.py"))
+    print(getFileLines(".asd"))
         

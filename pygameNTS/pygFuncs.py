@@ -18,7 +18,7 @@ def variables() -> tuple[Coordinate, mousePress, pygameKeyCode]:
 @overload
 def hoverColorFunc(rectColor: ColorRBG) -> ColorRBG: """Default function."""
 @overload
-def hoverColorFunc(rectColor: ColorRBG, addRed: int, addBlue: int, addGree: int) -> ColorRBG: """***KEYWORD ARGUMENTS RECOMMENDED*** Add a custom amount of a specific color."""
+def hoverColorFunc(rectColor: ColorRBG, addRed: int, addBlue: int, addGreen: int) -> ColorRBG: """***KEYWORD ARGUMENTS RECOMMENDED*** Add a custom amount of a specific color."""
 @overload
 def hoverColorFunc(rectColor: ColorRBG, addColor: int, allColors: bool) -> ColorRBG: """***KEYWORD ARGUMENTS RECOMMENDED*** Add the same amount to all colors that are accessable, by default this is set to -25. 'allColors' defines whetehr all colors are affected or only colors that are below 255."""
 #@logC()
@@ -77,6 +77,27 @@ def hoverColorFunc(
         BlueAfter = 255
     
     return (RedAfter, GreenAfter, BlueAfter)
+
+UsedCodes = {}
+def animationTimer(time: milliseconds, code: int)  -> bool:
+    """Recommend to use different codes for different instances."""
+    global UsedCodes
+    while True:
+        if code in [n for n, x in UsedCodes.items()]:
+            break
+        else:
+            UsedCodes[code] = (time, pygame.time.get_ticks())
+    if code in [n for n, x in UsedCodes.items()]:
+        ammountOfTime, timeStarted = UsedCodes[code]    
+
+        
+        if ammountOfTime > pygame.time.get_ticks()-timeStarted:
+            return True
+        else:
+            del UsedCodes[code]
+            return False
+    else:
+        UsedCodes[code] = (time, pygame.time.get_ticks())
 
 if __name__ == '__main__':
     ...
