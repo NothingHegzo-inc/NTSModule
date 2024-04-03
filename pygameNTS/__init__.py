@@ -3,7 +3,7 @@ sys.path.append(os.path.dirname(__file__))
 import pygame
 
 from ButtonClasses.Button import Button
-from pygFuncs import hoverColorFunc, variables, animationTimer
+from pygFuncs import hoverColorFunc, variables, animationDelay, displayTimer
 from pygVariables import *
 from Base import Base
 from ButtonClasses.StripC import StripC

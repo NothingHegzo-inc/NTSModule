@@ -12,20 +12,21 @@ pygame.init()
 
 class Base:
     @property
-    def screenColor(self) -> ColorRBG: ...
+    def screenColor(self) -> ColorRBG: self.centeralize()
     @property
     def quitImageOption(self) -> bool: ...
     @property
     def defaultColor(self) -> None: ...
     screenColor: Optional[ColorRBG] = None
     quitImageOption: bool = False
-    defaultColor: ColorRBG = None
+    defaultColor: ColorRBG = None    
     def __init__(self, function) -> None:
         self._Checkfunc(function)
         try:
             self.surface: Surface = pygame.display.get_surface()
             self.width: int = pygame.display.get_window_size()[0]
             self.height : int = pygame.display.get_window_size()[1]
+            Base.center: Coordinate = int(pygame.display.get_window_size()[0]/2),int(pygame.display.get_window_size()[1]/2)
         except pygame.error:
             raise UnknownVars(f"Please make sure that your pygame window is initialised/opened before calling on this decorator.")
         Base.defaultColor = self.screenColor

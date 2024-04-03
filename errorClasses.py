@@ -53,11 +53,11 @@ class UnknownVars(Exception):
                     argsBefore = "".join([f"'{CYAN}{x}{RESET}', " for x in argsBefore])
                     super().__init__(f"Variables {argsBefore}and/or '{CYAN}{lastArg}{RESET}' were not specified.")
         logging.error(f"{self.__class__.__name__}, Variables: '{variables}', or '{text}'")
-class CannotOverride(Exception):
+class CannotOverwrite(Exception):
     def __init__(self, argument: nameOfArg) -> None:
         if type(argument) is not str:
             raise TypeError(f"Argument '{CYAN}argument{RESET}' has to be type {DGREEN}str{RESET} not type {DGREEN}{type(argument).__name__}{RESET}.")
-        super().__init__(f"Argument '{CYAN}{argument}{RESET}' cannot be overriden.")
+        super().__init__(f"Argument '{CYAN}{argument}{RESET}' cannot be overwritten.")
 class IncorrectFilePathError(Exception):
     @overload
     def __init__(self, *text) -> None: ...
@@ -149,6 +149,10 @@ class IncorrectTypesError(Exception):
                 super().__init__(f"Argument '{CYAN}{arguments}{RESET}' has to be type {DGREEN}{argumentTypes.__name__}{RESET}.")
         logging.error(f'{self.__class__.__name__}, Arguments: "{arguments}","{argumentTypes}" or "{text}"')
 class UnknownError(Exception):
+    @overload
+    def __init__(self, *text) -> None: ...
+    @overload
+    def __init__(self, functionName: function) -> None: ...
     def __init__(self, *text, functionName: function) -> None:
         def nothing(): ...
         try:

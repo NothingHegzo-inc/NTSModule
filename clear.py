@@ -24,7 +24,7 @@ def clear(
                 permanentSpecifier = permaSpecifier
                 permaAdded = True
             else:
-                raise CannotOverride('{CYAN}permaSpecifier{RESET}')
+                raise CannotOverwrite('permaSpecifier')
         else:
             raise IncorrectTypesError(arguments="permaSpecifier", argumentTypes=str)#raise IncorrectArgsError(f"Variable '{CYAN}permaSpecifier{RESET}' has to be type {DGREEN}str{RESET} not {DGREEN}{type(permaSpecifier).__name__}{RESET}.")
     else:

@@ -78,26 +78,45 @@ def hoverColorFunc(
     
     return (RedAfter, GreenAfter, BlueAfter)
 
-UsedCodes = {}
-def animationTimer(time: milliseconds, code: int)  -> bool:
+animationTimerUsedCodes = {}
+def displayTimer(time: milliseconds, code: int)  -> bool:
     """Recommend to use different codes for different instances."""
-    global UsedCodes
+    global animationTimerUsedCodes
     while True:
-        if code in [n for n, x in UsedCodes.items()]:
+        if code in [n for n, x in animationTimerUsedCodes.items()]:
             break
         else:
-            UsedCodes[code] = (time, pygame.time.get_ticks())
-    if code in [n for n, x in UsedCodes.items()]:
-        ammountOfTime, timeStarted = UsedCodes[code]    
+            animationTimerUsedCodes[code] = (time, pygame.time.get_ticks())
+    if code in [n for n, x in animationTimerUsedCodes.items()]:
+        ammountOfTime, timeStarted = animationTimerUsedCodes[code]    
 
         
         if ammountOfTime > pygame.time.get_ticks()-timeStarted:
             return True
         else:
-            del UsedCodes[code]
+            del animationTimerUsedCodes[code]
             return False
     else:
-        UsedCodes[code] = (time, pygame.time.get_ticks())
+        animationTimerUsedCodes[code] = (time, pygame.time.get_ticks())
+
+delayTimerUsedCodes = {}
+def animationDelay(time: milliseconds, code :int) -> bool:
+    """Recommend to use different codes for different instances."""
+    global delayTimerUsedCodes
+    while True:
+        if code in [n for n, x in delayTimerUsedCodes.items()]:
+            break
+        else:
+            delayTimerUsedCodes[code] = (time, pygame.time.get_ticks())
+    if code in [n for n, x in delayTimerUsedCodes.items()]:
+        ammountOfTime, timeStarted = delayTimerUsedCodes[code]
+        if ammountOfTime > pygame.time.get_ticks()-timeStarted:
+            return False
+        else:
+            del delayTimerUsedCodes[code]
+            return True
+    else:
+        delayTimerUsedCodes[code] = (time, pygame.time.get_ticks())
 
 if __name__ == '__main__':
     ...

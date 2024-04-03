@@ -41,9 +41,11 @@ LIGHTBLUEBACK: str = "\033[104m"
 PINKBACK: str = "\033[105m"
 CYANBACK: str = "\033[106m"
 WHITEBACK: str = "\033[107m"
+ALLCOLORS = [BLACK, DRED, DGREEN, DYELLOW, DBLUE, DPINK, TEAL, DWHITE, RED, GREEN, YELLOW, BLUE, PINK, CYAN, WHITE]
 PASS: str = ""
 nameOfArg = str
 function = Any
+filePath = str
 
 if __name__ == '__main__':
     ...

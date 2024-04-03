@@ -6,19 +6,21 @@ from clear import clear
 from invalidOption import invalidOption
 
 @overload
-def question(question: str, maxOptions: int) -> int: ...
+def question(question: str, maxOptions: int) -> int: """Default function, ask a question with a number of options."""
 @overload
-def question(question: str, extraOptions: list[str] | dict[str , int]) -> int | str: ...
+def question(question: str, extraOptions: list[str] | dict[str , int]) -> int | str: """This will return an int if a dict is used and a str if a list is used."""
 @overload
-def question(question: str, maxOptions: int, animation: bool) -> int: ...
+def question(question: str, maxOptions: int, animation: bool) -> int: """Animation using the 'Print' function. By default this is set to False."""
 @overload
-def question(question: str, maxOptions: int, zeroIsOption: bool) -> int: ...
+def question(question: str, maxOptions: int, zeroIsOption: bool) -> int: """Choose if zero is one of the options or not. By default this is set to False."""
 @overload
-def question(question: str, maxOptions: int, startClear: bool) -> int: ...
+def question(question: str, maxOptions: int, startClear: bool) -> int: """Start the questioning with a 'clear' function. By default this is set to False."""
 @overload
-def question(question: str, maxOptions: int, extraOptions: list[str] | dict[str , int]) -> int | str: ...
+def question(question: str, maxOptions: int, extraOptions: list[str] | dict[str , int]) -> int | str: """Either use maxOptions and extraOptions or just extraOption. """
 @overload
-def question(question: str, maxOptions: int, zeroIsOption: bool, animation: bool, startClear: bool, extraOptions: list[str] | dict[str , int]) -> int | str: ...
+def question(question: str, maxOptions: int, zeroIsOption: bool, animation: bool, startClear: bool, extraOptions: list[str] | dict[str , int]) -> int | str: """All the arguments for this function in order."""
+@overload
+def question(question: str, maxOptions: int, zeroIsOption: bool, animation: bool, startClear: bool, extraOptions: list[str] | dict[str , int], **kwargs) -> int | str: """Add any keyword arguments used for a normal print function."""
 @logC()
 def question(
         question: str,

@@ -1,4 +1,4 @@
-import sys, os, logging
+import sys, os, logging, shutil
 sys.path.append(os.path.dirname(__file__))
 from variables import *
 from getFileLines import getFileLines
@@ -9,8 +9,11 @@ from question import question
 from errorClasses import *
 from logger import logC
 from validationChecker import checkPara
+from createInstaller import createInstaller, createModuleInstaller
+from fileTypeFinder import fileTypes
+from createVar import createVar
 
-
+maxBackupsallowed = 5
 def Logging() -> None:
     needLogging = []
     if os.path.isdir("Loggers"):
@@ -59,23 +62,35 @@ def Logging() -> None:
             o1.writelines(read)
         with open("Loggers/logger.log", "w") as o2:
             o2.write("")
+    if len(os.listdir("Loggers/backups")) == maxBackupsallowed:
+        shutil.rmtree("Loggers/backups")
 
 Logging()
-del Logging
-def pycacheDel() -> None:
-    import shutil
-    sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-    if os.path.isdir("NTSModule/__pycache__"):
-        shutil.rmtree("NTSModule/__pycache__")
-    if os.path.isdir("__pycache__"):
-        shutil.rmtree("__pycache__")
-    if os.path.isdir("NTSModule/pygameNTS/__pycache__"):
-        shutil.rmtree("NTSModule/pygameNTS/__pycache__")
-    if os.path.isdir("NTSModule/pygameNTS/ButtonClasses/__pycache__"):
-        shutil.rmtree("NTSModule/pygameNTS/ButtonClasses/__pycache__")
-    del shutil
+del Logging, maxBackupsallowed
+@logC()
+def pycacheDel(foldersToCheck: Optional[dict] = None) -> None:
+    if not checkPara(foldersToCheck, None):
+        for path, typeOfFille in foldersToCheck.items():
+            if typeOfFille == "file":
+                continue
+            elif type(typeOfFille) == dict:
+                if createVar(path, ["/", "\\"], "/").split("/")[-1] == "__pycache__":
+                    shutil.rmtree(path)
+                    Print(f"{RED}{path} deleted{RESET}")
+                else:
+                    pycacheDel(typeOfFille)
+    else:
+        sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+        if os.path.isdir("NTSModule/__pycache__"):
+            shutil.rmtree("NTSModule/__pycache__")
+        if os.path.isdir("__pycache__"):
+            shutil.rmtree("__pycache__")
+        if os.path.isdir("NTSModule/pygameNTS/__pycache__"):
+            shutil.rmtree("NTSModule/pygameNTS/__pycache__")
+        if os.path.isdir("NTSModule/pygameNTS/ButtonClasses/__pycache__"):
+            shutil.rmtree("NTSModule/pygameNTS/ButtonClasses/__pycache__")
 pycacheDel()
-del pycacheDel
+del pycacheDel, overload, Optional, Any, os, sys
 logging.info(f"NTSModule imported successfully.")
 clear()
 Print(f"Module {GREEN}NTSModule{RESET} has been successfully imported!\nEnjoy!")

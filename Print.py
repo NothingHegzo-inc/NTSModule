@@ -3,10 +3,11 @@ sys.path.append(os.path.dirname(__file__))
 from imports import *
 
 
-@overload
-def Print() -> None: """Scroll to find out!"""
+
 @overload
 def Print(*printText, **kwargs) -> None: """Normal print, can add normal print function keyword arguments."""
+@overload
+def Print(*printText, rinput: bool) -> None: """Gives the option to make it an input and return the value of the user with all the added functionality."""
 @overload
 def Print(*printText, animation: bool, **kwargs) -> None: """Print with animation option, set the second input variable to true."""
 @overload
@@ -16,6 +17,7 @@ def Print(
         *printText,
         animation: bool = False,
         animationDelay: Optional[int | float] = None,
+        rinput: bool = False,
         **kwargs
 ) -> Any:
     if animation is False:
@@ -31,6 +33,9 @@ def Print(
     else:
         raise IncorrectArgsError(f"Variable '{CYAN}animation{RESET}' has to be a {DGREEN}bool{RESET} not a {DGREEN}{type(animation).__name__}{RESET}.")
     
+    if rinput:
+        return input("> ")
+
     try:
         printText[1]
         return printText

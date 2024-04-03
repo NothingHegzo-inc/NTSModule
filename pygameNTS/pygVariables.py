@@ -7,5 +7,4 @@ Rect = pygame.Rect
 Coordinate = tuple[int,int]
 mousePress = tuple[bool, bool, bool]
 pygameKeyCode = int
-filePath = str
 milliseconds = int
