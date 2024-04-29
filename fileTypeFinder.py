@@ -6,10 +6,9 @@ from clear import clear
 from imports import *
 from io import TextIOWrapper
 from functools import cache, wraps
+from variables import *
 
-fileType = str
-file = str
-status = str | bool
+
 @overload
 def fileTypes(Path: filePath) -> dict[file , fileType] | dict[file, status]: """"""
 @overload

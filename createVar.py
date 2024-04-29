@@ -14,7 +14,7 @@ def createVar(text: str, excludedCharacters: list, changeInto: str) -> str: """W
 def createVar(text: str, excludedCharacters: list, changeInto: str, creatingInstallerVar: bool) -> str: """This variables was created for the custom function 'fileTypeFinder()', which takes the last 4 paths of a filePath.\nFor example:\n    'C:/drive/parentFolder/subFolder/file' -> 'drive/parentFolder/subFolder/file'"""
 @overload
 def createVar(text: str, excludedCharacters: list, changeInto: str, delete: bool) -> str: """Instead of changing it into a different string, it completely excludees and deletes the character from the text. By default this is set to False."""
-
+@logC()
 def createVar(
     text: str, 
     excludedCharacters: list = ["`", "|", "/", "-", "$", "!", '"', "'", "£", "&", "%", "^", "*", "(", ")", "[", "]", "{", "}", ";", ",", "#", ".","@", ":", "<", ">","\\", " "], 
@@ -22,8 +22,8 @@ def createVar(
     creatingInstallerVar: bool = False,
     delete: bool = False
 ) -> str:
-    text = os.path.splitext(text)[0]
     if creatingInstallerVar:
+        text = os.path.splitext(text)[0]
         text = "/".join(createVar(text, ["/", "\\"], "/").split("/")[-4:])
     newPath = ""
     if delete and not checkPara(changeInto, None):

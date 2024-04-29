@@ -87,7 +87,7 @@ def question(
                         return answer
                     else:
                         continue
-                invalidOption(answer=answer)
+                invalidOption(answer=answer, delay=startClear)
             except:
                 if not checkPara(extraOptions, None) and checkPara(extraOptions, list):
                     for option in extraOptions:
@@ -95,16 +95,16 @@ def question(
                             return option
                         else:
                             continue
-                    invalidOption(answer=answer)
+                    invalidOption(answer=answer, delay=startClear)
                 elif not checkPara(extraOptions, None) and checkPara(extraOptions, dict):
                     for option, output in extraOptions.items():
                         if answer.casefold() == option.casefold():
                             return output
                         else:
                             continue
-                    invalidOption(answer=answer)
+                    invalidOption(answer=answer, delay=startClear)
                 else:
-                    invalidOption(answer=answer)
+                    invalidOption(answer=answer, delay=startClear)
     elif checkPara(maxOptions, None) and checkPara(extraOptions, list):
         while True:
             if startClear:
@@ -125,7 +125,7 @@ def question(
                     else:
                         logging.error(f"{IncompatableArgsError.__name__}")
                         raise IncompatableArgsError(f"Variable '{CYAN}extraOptions{RESET}' has a {DGREEN}{type(option).__name__}{RESET} which is incompatable with this function.")
-            invalidOption(answer=answer)
+            invalidOption(answer=answer, delay=startClear)
     elif checkPara(maxOptions, None) and checkPara(extraOptions, dict):
         while True:
             if startClear:
@@ -145,7 +145,7 @@ def question(
                             return output
                     else:
                         raise IncompatableArgsError(f"Variable '{CYAN}extraOptions{RESET}' has a {DGREEN}{type(option).__name__}{RESET} which is incompatable with this function.")
-            invalidOption(answer=answer)
+            invalidOption(answer=answer, delay=startClear)
         
 
 

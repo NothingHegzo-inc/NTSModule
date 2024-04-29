@@ -42,10 +42,16 @@ PINKBACK: str = "\033[105m"
 CYANBACK: str = "\033[106m"
 WHITEBACK: str = "\033[107m"
 ALLCOLORS = [BLACK, DRED, DGREEN, DYELLOW, DBLUE, DPINK, TEAL, DWHITE, RED, GREEN, YELLOW, BLUE, PINK, CYAN, WHITE]
+
+# Extra variables and types
+class _SpecialClass: ...
 PASS: str = ""
-nameOfArg = str
-function = Any
-filePath = str
+nameOfArg = _SpecialClass
+function = _SpecialClass
+filePath = _SpecialClass
+fileType = _SpecialClass
+file = _SpecialClass
+status = _SpecialClass | str | bool
 
 if __name__ == '__main__':
     ...
